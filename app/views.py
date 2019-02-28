@@ -24,6 +24,11 @@ def home():
 
 @app.route('/about/')
 def about():
+    """Render the website's secure page page."""
+    return render_template('secure_page.html')
+    
+@app.route('/secure-page')
+def secure_page():
     """Render the website's about page."""
     return render_template('about.html')
 

@@ -10,6 +10,7 @@ from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, current_user, login_required
 from app.forms import LoginForm
 from app.models import UserProfile
+from werkzeug.security import check_password_hash
 
 
 ###
@@ -24,13 +25,14 @@ def home():
 
 @app.route('/about/')
 def about():
-    """Render the website's secure page page."""
-    return render_template('secure_page.html')
-    
-@app.route('/secure-page')
-def secure_page():
     """Render the website's about page."""
     return render_template('about.html')
+    
+@app.route('/secure-page')
+@login_required
+def secure_page():
+    """Render the website's secure page."""
+    return render_template('secure-page.html')
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -41,8 +43,8 @@ def login():
         # and not just one field
         if form.username.data:
             # Get the username and password values from the form.
-            username = form.username.data
-		password = form.password.data
+            #username = form.username.data
+		#password = form.password.data
 
             # using your model, query database for a user based on the username           
             # and password submitted. Remember you need to compare the password hash.
@@ -58,10 +60,10 @@ def login():
             	
             	login_user(user)
             	
-            	flash('Logged in successfully.', 'success')
+            	flash('Logged in successfully.')
 
             # remember to flash a message to the user
-            	return redirect(url_for("secure_page"))  # they should be redirected to a secure-page route instead
+            	return redirect(url_for("secure-page"))  # they should be redirected to a secure-page route instead
     return render_template("login.html", form=form)
 
 

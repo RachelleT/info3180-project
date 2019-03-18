@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block main %}
+    <h1>Profiles</h1>
+
+    <div>
+        {% for user in users %}
+        	<div id='box1'>{{ user.photo }}</div>
+              <div id='box2'>{{ user.first_name }}
+              {{ user.last_name }} <br>
+              {{ user.gender }} <br>
+              {{ user.location}}
+              </div>
+              <div id='box3'>
+              <button type="submit" name="submit">View Profile</button>
+              </div>
+         {% endfor %}
+    </div>
+{% endblock %}

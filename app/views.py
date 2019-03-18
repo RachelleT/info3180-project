@@ -9,8 +9,10 @@ from app import app, db, login_manager
 from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, current_user, login_required
 from app.forms import LoginForm
+from app.forms import ProfileForm
 from app.models import UserProfile
 from werkzeug.security import check_password_hash
+import datetime
 
 
 ###
@@ -28,6 +30,36 @@ def about():
     """Render the website's about page."""
     return render_template('about.html')
     
+@app.route('/profile', methods=["GET", "POST"])
+def profile():
+	form = ProfileForm()
+	if form.validate_on_submit():
+		firstname = form.first_name.data
+		lastname = form.last_name.data
+		gender = form.gender.data
+		email = form.email.data
+		location = form.location.data
+		biography = form.biography.data
+		photo = form.photo.data 
+		filename = secure_filename(photo.filename)
+		photo.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+		created_on = format_date_joined()
+		user = UserProfile(first_name=firstname, last_name=lastname, gender=gender, email=email, location=location, biography=biography, photo=photo, date=created_on)
+		db.session.add(user)
+		db.session.commit()
+		flash('Profile successfully creadted!')
+           	return redirect(url_for('profiles'))
+	return render_template('profile.html', form=form)
+
+@app.route('/profiles', methods=["GET","POST"])
+def profiles():
+	users = UserProfile.query.all()
+	return render_template('profiles.html', users=users)
+
+@app.route('/profile/<userid>')
+def userprofile():
+	return 1
+	
 @app.route('/secure-page')
 @login_required
 def secure_page():
@@ -85,6 +117,10 @@ def load_user(id):
 # The functions below should be applicable to all Flask apps.
 ###
 
+def format_date_joined():
+	now = datetime.datetime.now()
+	## Format the date to return only month and year date
+	return "Joined "+ date_joined.strftime("%b, %d, %Y")
 
 @app.route('/<file_name>.txt')
 def send_text_file(file_name):

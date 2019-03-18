@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block main %}
+  <div id='outer'>
+	<h1>Add Profile</h1>
+	{% include 'flash_messages.html' %}
+	<form action="{{ url_for('profile') }}" method="POST">
+	{{ form.csrf_token }}
+	<div id='inner'> 
+	{{ form.first_name.label }} <br>
+	{{ form.first_name }}
+	</div>
+	<div id='inner'>
+        {{ form.last_name.label }} <br>
+        {{ form.last_name }}
+      </div>
+      <div id='inner'>
+      	{{ form.gender.label (placeholder="Select gender")}} <br>
+       	{{ form.gender }}			
+  	</div>
+      <div id='inner'>
+        {{ form.email.label }} <br>
+        {{ form.email(placeholder="e.g. jdoe@example.com") }}
+      </div>
+      <div id='inner'>
+        {{ form.location.label }} <br>
+        {{ form.location(placeholder="e.g. Kingston, Jamaica") }}
+      </div>
+      <div id='inner'>
+        {{ form.biography.label }} <br>
+        {{ form.biography}}
+      </div>
+      <div id='inner'>
+        {{ form.photo.label }} <br>
+        {{ form.photo }}
+      </div>
+      <div id='inner'>
+      <button type="submit" name="submit">Add Profile</button>
+	</div>
+	</form>
+  </div>
+{% endblock %}

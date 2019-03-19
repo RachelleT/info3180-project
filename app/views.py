@@ -8,11 +8,12 @@ This file creates your application.
 from app import app, db, login_manager
 from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, current_user, login_required
-from app.forms import LoginForm
 from app.forms import ProfileForm
 from app.models import UserProfile
 from werkzeug.security import check_password_hash
+from werkzeug.utils import secure_filename
 import datetime
+import os
 
 
 ###
@@ -33,7 +34,7 @@ def about():
 @app.route('/profile', methods=["GET", "POST"])
 def profile():
 	form = ProfileForm()
-	if form.validate_on_submit():
+	if form.validate_on_submit() and request.method == 'POST':
 		firstname = form.first_name.data
 		lastname = form.last_name.data
 		gender = form.gender.data
@@ -44,21 +45,23 @@ def profile():
 		filename = secure_filename(photo.filename)
 		photo.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 		created_on = format_date_joined()
-		user = UserProfile(first_name=firstname, last_name=lastname, gender=gender, email=email, location=location, biography=biography, photo=photo, date=created_on)
+		user = UserProfile(firstname,lastname,gender,email,location,biography,filename, date=created_on)
 		db.session.add(user)
 		db.session.commit()
 		flash('Profile successfully creadted!')
-           	return redirect(url_for('profiles'))
+		return redirect(url_for('profiles'))
+	flash_errors(form)
 	return render_template('profile.html', form=form)
 
-@app.route('/profiles', methods=["GET","POST"])
+@app.route('/profiles')
 def profiles():
-	users = UserProfile.query.all()
+	users = db.session.query(UserProfile).all()
 	return render_template('profiles.html', users=users)
 
 @app.route('/profile/<userid>')
-def userprofile():
-	return 1
+def userprofile(userid):
+	user = UserProfile.query.filter_by(id = userid).first()
+	return render_template('userprofile.html', user = user)
 	
 @app.route('/secure-page')
 @login_required
@@ -99,14 +102,6 @@ def login():
     return render_template("login.html", form=form)
 
 
-@app.route("/logout")
-@login_required
-def logout():
-	logout_user()
-	flash('You have been logged out.')
-	return redirect(url_for('home'))
-
-
 # user_loader callback. This callback is used to reload the user object from
 # the user ID stored in the session
 @login_manager.user_loader
@@ -120,7 +115,15 @@ def load_user(id):
 def format_date_joined():
 	now = datetime.datetime.now()
 	## Format the date to return only month and year date
-	return "Joined "+ date_joined.strftime("%b, %d, %Y")
+	return "Joined on "+ now.strftime("%B, %d, %Y")
+
+def flash_errors(form):
+    for field, errors in form.errors.items():
+        for error in errors:
+            flash(u"Error in the %s field - %s" % (
+                getattr(form, field).label.text,
+                error
+), 'danger')
 
 @app.route('/<file_name>.txt')
 def send_text_file(file_name):

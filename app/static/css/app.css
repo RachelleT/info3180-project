@@ -29,24 +29,72 @@ h1 {
 	margin-left: 300px;
 }
 
-#box1 {
+img {
+	border-radius: 50%;
 	height: 100px;
 	width: 100px;
+}
+
+#h {
+	margin-left: 190px;
+}
+
+#c {
+	background-color: #008CBA;
+}
+#box1 {
 	float: left;
+	width: 400px;
+	height: 200px;
 	text-align: center;
-	margin-left: 400px;
 }
 
 #box2 {
-	height: 100px;
-	width: 100px;
 	float: left;
+	width: 200px;
+	height: 200px;
+	text-align: left;
 }
 
 #box3 {
-	height: 100px;
-	width: 100px;
+	float: left;
+	width: 400px;
+	height: 200px;
+}
+
+#box4 {
+	width: 500px;
+	height: 500px;
+	background-color: white;
+	margin-left: 300px;
+	margin-top:100px;
+}
+
+#box5 {
+	float: left;
+	height: 150px;
+	text-align: center;
+	margin-top: 20px;
+	width: 250px;
+}
+
+#box7 {
+	float: left;
+	height: 130px;
+	text-align: center;
+	margin-top: 20px;
+	width: 250px;
+}
+
+#box6 {
+	float: left;
+	width: 500px;
+	height: 150px;
+}
+
+#box8 {
 	float: left;
 	text-align: center;
-	margin-right: 350px;
+	width: 500px;
+	height: 150px;
 }

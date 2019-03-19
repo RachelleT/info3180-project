@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+<div id='outer'>
+        	<div id='box4'>
+        	 {% include 'flash_messages.html' %}
+        	 <div id='box5'><img src= "{{ url_for('static', filename="uploads/" + user.photo) }}" /></div>
+              <br>
+              <div id='box7'> {{ user.first_name }}
+              {{ user.last_name }} <br>
+              {{ user.email }} <br>
+              {{ user.location }} <br>
+              {{ user.date }}
+              </div>
+              <div id='box6'>
+              <h3> About Me </h3>
+              {{ user.biography }}
+              </div>
+              <div id='box8'>
+              <button type="submit" name="submit">Send Message</button>
+              <button type="submit" name="submit" id='c'>Follow</button>
+              </div>
+             </div>
+    </div>
+
+{% endblock %}
+

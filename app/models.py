@@ -17,7 +17,7 @@ class UserProfile(db.Model):
     location = db.Column(db.String(80))
     biography = db.Column(db.String(80))
     photo = db.Column(db.String(80))
-    date = db.Column(db.Date)
+    date = db.Column(db.String(80))
     #username = db.Column(db.String(80), unique=True)
     #password = db.Column(db.String(255))
 
@@ -30,8 +30,6 @@ class UserProfile(db.Model):
         self.biography = biography
         self.photo = photo
         self.date = date
-        #self.username = username
-        #self.password = generate_password_hash(password, method='pbkdf2:sha256')
 
     def is_authenticated(self):
         return True
